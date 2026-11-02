@@ -8,13 +8,7 @@ import { AuditReasonModal } from '../components/AuditReasonModal';
 
 export const SecurityPage = () => {
   // Security Policy State
-  const [policy, setPolicy] = useState({
-    enforceMpin: true,
-    enforce2fa: false,
-    sessionTtlHours: 168,
-    maxFailedMpinAttempts: 5,
-    lockoutDurationMinutes: 30,
-  });
+  const [policy, setPolicy] = useState(null);
   const [loadingPolicy, setLoadingPolicy] = useState(true);
   const [savingPolicy, setSavingPolicy] = useState(false);
   const [policySuccess, setPolicySuccess] = useState(false);
@@ -161,7 +155,7 @@ export const SecurityPage = () => {
           </div>
         </div>
 
-        {loadingPolicy ? (
+        {loadingPolicy || !policy ? (
           <div className="py-8 flex justify-center text-slate-400">
             <Loader2 className="w-6 h-6 animate-spin text-emerald-500" />
           </div>
@@ -313,7 +307,7 @@ export const SecurityPage = () => {
                       </span>
                     </td>
                     <td className="py-3 px-4 font-mono text-slate-400 text-[11px]">
-                      {u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : 'Recent'}
+                      {u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString() : '—'}
                     </td>
                     <td className="py-3 px-4 text-right">
                       <div className="flex items-center justify-end space-x-2">
@@ -347,7 +341,7 @@ export const SecurityPage = () => {
         title={auditModal.title}
         message={auditModal.message}
         danger={auditModal.danger}
-        onCancel={() => setAuditModal((prev) => ({ ...prev, isOpen: false }))}
+        onClose={() => setAuditModal((prev) => ({ ...prev, isOpen: false }))}
         onConfirm={async (reason) => {
           if (auditModal.action) {
             await auditModal.action(reason);

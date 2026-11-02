@@ -4,8 +4,8 @@ import { ShieldCheck, Phone, KeyRound, Loader2, AlertCircle, Server } from 'luci
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage = () => {
-  const [phone, setPhone] = useState('+919000000001');
-  const [mpin, setMpin] = useState('1234');
+  const [phone, setPhone] = useState('');
+  const [mpin, setMpin] = useState('');
   const [error, setError] = useState('');
   const { login, loading } = useAuth();
   const navigate = useNavigate();
@@ -23,13 +23,8 @@ export const LoginPage = () => {
     if (res.success) {
       navigate('/');
     } else {
-      setError(res.error || 'Authentication rejected by 65.20.92.22:8000');
+      setError(res.error || 'Authentication rejected by server');
     }
-  };
-
-  const handleQuickFill = (p, m) => {
-    setPhone(p);
-    setMpin(m);
   };
 
   return (
@@ -72,7 +67,7 @@ export const LoginPage = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                placeholder="+919000000001"
+                placeholder="Enter registered phone (+91...)"
                 required
               />
             </div>
@@ -104,35 +99,10 @@ export const LoginPage = () => {
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              <span>Authenticate with 65.20.92.22:8000</span>
+              <span>Sign In</span>
             )}
           </button>
         </form>
-
-        {/* Quick Credentials Seeding */}
-        <div className="mt-8 pt-6 border-t border-slate-800">
-          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 text-center">
-            Configured Superadmin Accounts
-          </p>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <button
-              type="button"
-              onClick={() => handleQuickFill('+919000000001', '1234')}
-              className="p-2 rounded-lg bg-slate-800/60 border border-slate-750 text-slate-300 hover:border-emerald-500 hover:text-white transition-all text-left"
-            >
-              <span className="font-semibold block text-[11px] text-emerald-400">Root Superadmin</span>
-              <span className="font-mono text-[10px] text-slate-400 block">+919000000001 (1234)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickFill('+919000000002', '1234')}
-              className="p-2 rounded-lg bg-slate-800/60 border border-slate-750 text-slate-300 hover:border-emerald-500 hover:text-white transition-all text-left"
-            >
-              <span className="font-semibold block text-[11px] text-blue-400">Operations Lead</span>
-              <span className="font-mono text-[10px] text-slate-400 block">+919000000002 (1234)</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

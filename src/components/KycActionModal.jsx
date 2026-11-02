@@ -69,7 +69,7 @@ export const KycActionModal = ({ isOpen, doc, actionType, onClose, onSuccess }) 
           <div>
             <h3 className="text-lg font-bold text-white">{title}</h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Target Document: <code className="text-slate-300 font-mono">{doc.id || doc.docId || 'DOC-REF'}</code> — {doc.documentType || 'Aadhaar / Land Record'}
+              Target Document: <code className="text-slate-300 font-mono">{doc.id || doc.docId || '—'}</code> {doc.documentType ? `— ${doc.documentType}` : ''}
             </p>
           </div>
         </div>

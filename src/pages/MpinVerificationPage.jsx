@@ -67,7 +67,7 @@ export const MpinVerificationPage = () => {
             </div>
             <div>
               <h3 className="text-sm font-bold text-white">Operator Authorization</h3>
-              <p className="text-xs text-slate-400">Caller: {user?.phone || '+919000000001'} ({adminRole})</p>
+              <p className="text-xs text-slate-400">Caller: {user?.phone || '—'} ({adminRole || 'admin'})</p>
             </div>
           </div>
 
@@ -88,9 +88,6 @@ export const MpinVerificationPage = () => {
                 className="w-full text-center tracking-[0.5em] text-2xl font-mono px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 autoFocus
               />
-              <p className="text-[11px] text-slate-500 mt-1.5 text-center">
-                Default Superadmin MPIN seeded: <code className="text-slate-300 font-mono">1234</code>
-              </p>
             </div>
 
             {error && (

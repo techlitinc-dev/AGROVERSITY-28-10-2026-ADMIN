@@ -11,6 +11,11 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('agrovercity_access_token'));
   const [adminRole, setAdminRole] = useState(() => localStorage.getItem('agrovercity_admin_role') || 'superadmin');
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(!token);
+
+  useEffect(() => {
+    setInitializing(false);
+  }, []);
 
   useEffect(() => {
     if (user?.adminRole) {
@@ -52,13 +57,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const changeRole = (newRole) => {
+  const changeRole = (newRole = 'superadmin') => {
     setAdminRole(newRole);
     localStorage.setItem('agrovercity_admin_role', newRole);
-  };
-
-  const verifyMpin = async (mpin) => {
-    return await authApi.verifyMpin(mpin);
   };
 
   return (
@@ -67,12 +68,12 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         adminRole,
+        changeRole,
         isAuthenticated: !!token,
+        initializing,
         loading,
         login,
         logout,
-        changeRole,
-        verifyMpin,
       }}
     >
       {children}

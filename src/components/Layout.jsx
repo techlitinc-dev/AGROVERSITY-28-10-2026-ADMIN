@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Users, FileCheck2, ShieldCheck, 
-  Lock, LogOut, ChevronRight, Activity, Server, UserCheck
+  Lock, LogOut, ChevronRight, Activity, Server, UserCheck, Sprout
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -18,8 +18,15 @@ const NAV_ITEMS = [
     name: 'Users Management',
     path: '/users',
     icon: Users,
-    badge: 'API 2',
-    description: 'Roster, Personas & Farm Boundary'
+    badge: 'User 360°',
+    description: 'Roster, Personas & Activity Telemetry'
+  },
+  {
+    name: 'Farmer Management',
+    path: '/farmers',
+    icon: Sprout,
+    badge: 'Farmer 360°',
+    description: 'Directory, Land KYC & Agronomy Oversight'
   },
   {
     name: 'KYC Verification',
@@ -45,12 +52,7 @@ const NAV_ITEMS = [
 ];
 
 const ADMIN_ROLES = [
-  'superadmin',
-  'operations_lead',
-  'finance_admin',
-  'compliance_officer',
-  'agronomist',
-  'content_moderator'
+  'superadmin'
 ];
 
 export const Layout = () => {
@@ -105,9 +107,9 @@ export const Layout = () => {
             Active Role Context
           </label>
           <select
-            value={adminRole}
-            onChange={(e) => changeRole(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
+            value={adminRole || 'superadmin'}
+            onChange={(e) => changeRole && changeRole(e.target.value)}
+            className="w-full bg-slate-800 border border-slate-700 text-xs text-emerald-400 font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono"
           >
             {ADMIN_ROLES.map((r) => (
               <option key={r} value={r}>
@@ -120,15 +122,23 @@ export const Layout = () => {
         {/* Nav Items */}
         <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
           <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            Selected Persona Topics
+            Platform Governance Modules
           </div>
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname === item.path || 
+              (item.path !== '/' && location.pathname.startsWith(`${item.path}/`));
             return (
               <NavLink
                 key={item.path}
                 to={item.path}
+                onClick={() => {
+                  if (item.path === '/users') {
+                    navigate('/users');
+                  } else if (item.path === '/farmers') {
+                    navigate('/farmers');
+                  }
+                }}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all group ${
                   isActive
                     ? 'bg-emerald-600/15 text-emerald-400 border border-emerald-500/30 font-semibold'
@@ -157,8 +167,8 @@ export const Layout = () => {
                 {(user?.name || 'A').charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate">{user?.name || 'Super Admin'}</p>
-                <p className="text-[11px] text-slate-400 font-mono truncate">{user?.phone || '+919000000001'}</p>
+                <p className="text-xs font-semibold text-white truncate">{user?.name || 'Administrator'}</p>
+                <p className="text-[11px] text-slate-400 font-mono truncate">{user?.phone || '—'}</p>
               </div>
             </div>
             <button
@@ -197,7 +207,7 @@ export const Layout = () => {
         </header>
 
         {/* Routed View Body */}
-        <main className="flex-1 overflow-y-auto bg-slate-950 p-8">
+        <main className="flex-1 overflow-y-auto bg-slate-950 p-6 md:p-8">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>

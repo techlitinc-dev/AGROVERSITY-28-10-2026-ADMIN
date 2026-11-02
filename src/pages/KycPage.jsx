@@ -157,23 +157,27 @@ export const KycPage = () => {
                 </tr>
               ) : (
                 items.map((doc, idx) => {
-                  const id = doc.id || doc.docId || `KYC-DOC-${idx}`;
+                  const id = doc.id || doc.docId || '—';
                   return (
-                    <tr key={id} className="hover:bg-slate-850/50 transition-colors">
+                    <tr key={doc.id || doc.docId || idx} className="hover:bg-slate-850/50 transition-colors">
                       <td className="py-3 px-4 font-mono font-semibold text-white">
                         {id}
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex items-center space-x-1.5 text-slate-300">
-                          <User className="w-3.5 h-3.5 text-slate-500" />
-                          <span className="font-mono">{doc.uid || doc.userId || 'N/A'}</span>
-                        </div>
+                        <a
+                          href={`/users/${doc.uid || doc.userId}`}
+                          className="flex items-center space-x-1.5 text-slate-300 hover:text-emerald-400 group transition-colors"
+                          title="Open Single User Dashboard"
+                        >
+                          <User className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400" />
+                          <span className="font-mono group-hover:underline">{doc.uid || doc.userId || '—'}</span>
+                        </a>
                       </td>
                       <td className="py-3 px-4 text-slate-300 capitalize font-medium">
-                        {doc.documentType || doc.type || 'Identity / Land Record'}
+                        {doc.documentType || doc.type || '—'}
                       </td>
                       <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">
-                        {doc.submittedAt ? new Date(doc.submittedAt).toLocaleDateString() : 'Recent'}
+                        {doc.submittedAt ? new Date(doc.submittedAt).toLocaleDateString() : '—'}
                       </td>
                       <td className="py-3 px-4">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
